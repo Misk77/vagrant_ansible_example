@@ -1,0 +1,29 @@
+---
+- hosts: all
+
+  vars_files:
+    - vars.yaml
+
+  become: true
+
+  tasks:
+  # just to use shell, use yum module instead in real life scenario
+  - name: Update rhel
+    shell: yum update -y
+
+  - name: install the latest version of cowsay
+    yum:
+      name: "{{ package }}"
+      state: latest
+
+  - name: Test cowsay
+    shell: cowsay "from Misk playbook"
+    register: testcowsay
+
+  - name: Print debug message
+    debug:
+      msg: Hello, world!
+
+  - debug: msg="{{ testcowsay.stdout }}"
+
+  - debug: msg="{{ testcowsay.stderr }}"

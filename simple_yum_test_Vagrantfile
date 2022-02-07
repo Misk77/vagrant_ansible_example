@@ -1,0 +1,20 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+ config.vm.box_check_update = "false"
+ config.vm.provider "virtualbox" do |vb|
+   vb.memory = "1024"
+ end
+
+ config.vm.define "server-01" do |server01|
+   server01.vm.hostname = "node-01"
+   server01.vm.box = "generic/rhel7"
+   server01.vm.network :private_network, ip: "192.168.56.10"
+   #server01.vm.synced_folder "/apps/shared", "/shared"
+   #Provision the server01server with Ansible
+   server01.vm.provision "ansible" do |ansible|
+     ansible.playbook="configuration-playbook.yaml"
+   end
+  end
+end
